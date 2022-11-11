@@ -25,13 +25,4 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2022.10"
 
 project {
-    buildType {
-        id("HelloWorld")
-        name = "Hello World"
-        steps {
-            script {
-                scriptContent = "echo 'Hello World' && date"
-            }
-        }
-    }
 }
