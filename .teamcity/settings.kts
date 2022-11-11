@@ -31,7 +31,7 @@ project {
         name = "Hello World"
         steps {
             script {
-                scriptContent = "echo 'Hello World'"
+                scriptContent = "echo 'Hello World' && date"
             }
         }
     }
