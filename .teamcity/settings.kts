@@ -40,6 +40,18 @@ project {
             }
         }
     }
+    buildType {
+        vcs {
+            root(TCDSL)
+        }
+        id("FOO")
+        name = "FOO"
+        steps {
+            script {
+                scriptContent = "env | sort"
+            }
+        }
+    }
 }
 
 object TCDSL: GitVcsRoot({
