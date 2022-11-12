@@ -33,6 +33,9 @@ project {
 
 object HelloWorld: BuildType({
     name = "Hello world #1"
+    vcs {
+        root(TCDSL)
+    }
     steps {
         script {
             scriptContent = "echo 'Hello world!'"
@@ -48,3 +51,16 @@ object HelloFoo: BuildType({
         }
     }
 })
+
+object TCDSL: GitVcsRoot({
+    name = "This is TCDSL Root"
+    url = "https://github.com/grmmvv/TCDSL.git"
+    branch = "refs/heads/master"
+    branchSpec = "refs/heads/*"
+    checkoutPolicy = AgentCheckoutPolicy.SHALLOW_CLONE
+    authMethod = token {
+        userName = "grmmvv"
+        tokenId = "credentialsJSON:757b93d4-4abe-4211-a875-d15bb135d3da"
+    }
+})
+}
