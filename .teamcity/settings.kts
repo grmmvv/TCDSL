@@ -1,5 +1,6 @@
 import jetbrains.buildServer.configs.kotlin.*
 import jetbrains.buildServer.configs.kotlin.buildSteps.script
+import jetbrains.buildServer.configs.kotlin.vcs.GitVcsRoot
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -26,7 +27,11 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2022.10"
 
 project {
+    vcsRoot(TCDSL)
     buildType {
+        vcs {
+            root(TCDSL)
+        }
         id("HelloWorld")
         name = "Hello World"
         steps {
@@ -36,3 +41,14 @@ project {
         }
     }
 }
+
+object TCDSL: GitVcsRoot({
+    name = "This is TeamCity DSL VCS Root"
+    url = "https://github.com/grmmvv/TCDSL.git"
+    branch = "refs/heads/master"
+    branchSpec = "refs/heads/*"
+    checkoutPolicy = AgentCheckoutPolicy.SHALLOW_CLONE
+    authMethod = token {
+        tokenId = "credentialsJSON:eeb4ff4b-fd97-4962-989b-a2930fda8fc2"
+    }
+})
