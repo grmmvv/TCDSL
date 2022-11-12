@@ -32,7 +32,7 @@ project {
 }
 
 object HelloWorld: BuildType({
-    name = "Hello world"
+    name = "Hello world #1"
     steps {
         script {
             scriptContent = "echo 'Hello world!'"
