@@ -60,7 +60,6 @@ object TCDSL: GitVcsRoot({
     branchSpec = "refs/heads/*"
     checkoutPolicy = AgentCheckoutPolicy.SHALLOW_CLONE
     authMethod = token {
-        userName = "grmmvv"
         tokenId = "credentialsJSON:757b93d4-4abe-4211-a875-d15bb135d3da"
     }
 })
