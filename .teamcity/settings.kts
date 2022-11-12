@@ -27,40 +27,24 @@ To debug in IntelliJ Idea, open the 'Maven Projects' tool window (View
 version = "2022.10"
 
 project {
-    vcsRoot(TCDSL)
-    buildType {
-        vcs {
-            root(TCDSL)
-        }
-        id("HelloWorld")
-        name = "Hello World"
-        steps {
-            script {
-                scriptContent = "echo 'Hello World' && date"
-            }
-        }
-    }
-    buildType {
-        vcs {
-            root(TCDSL)
-        }
-        id("FOO")
-        name = "FOO"
-        steps {
-            script {
-                scriptContent = "env | sort"
-            }
-        }
-    }
+    buildType(HelloWorld)
+    buildType(HelloFoo)
 }
 
-object TCDSL: GitVcsRoot({
-    name = "This is TeamCity DSL VCS Root"
-    url = "https://github.com/grmmvv/TCDSL.git"
-    branch = "refs/heads/master"
-    branchSpec = "refs/heads/*"
-    checkoutPolicy = AgentCheckoutPolicy.SHALLOW_CLONE
-    authMethod = token {
-        tokenId = "credentialsJSON:eeb4ff4b-fd97-4962-989b-a2930fda8fc2"
+object HelloWorld: BuildType({
+    name = "Hello world"
+    steps {
+        script {
+            scriptContent = "echo 'Hello world!'"
+        }
+    }
+})
+
+object HelloFoo: BuildType({
+    name = "This is another project"
+    steps {
+        script {
+            scriptContent = "env | sort"
+        }
     }
 })
