@@ -40,12 +40,13 @@ project {
 }
 
 object UnitTesing : Project({
-    name = "FRONTEND"
+    name = "UnitTesing"
 
-    buildType(Frontend_FrontendUnitTests)
-    buildType(Frontend_MakeFrontEndUnitTests)
+    buildType(MakeUnitTests)
 
-    template(UNIT_FRONTEND)
+    subProject(Backend)
+    subProject(Frontend)
+
 })
 
 object HelloWorld : BuildType({
@@ -81,6 +82,25 @@ object TCDSL : GitVcsRoot({
     }
 })
 
+
+object MakeUnitTests : BuildType({
+    name = "Make unit-tests"
+
+    type = BuildTypeSettings.Type.COMPOSITE
+
+    vcs {
+        root(AbsoluteId("HttpsGithubComGrmmvvTcdslGit"))
+
+        showDependenciesChanges = true
+    }
+
+    dependencies {
+        snapshot(Backend_MakeBackendUnitTests) {
+        }
+        snapshot(Frontend_MakeFrontEndUnitTests) {
+        }
+    }
+})
 
 object PlaywrightDSL : BuildType({
     id("Playwright")
