@@ -36,7 +36,17 @@ project {
     buildType(HelloWorld)
     buildType(HelloFoo)
     buildType(PlaywrightDSL)
+    subProject(UnitTesing)
 }
+
+object UnitTesing : Project({
+    name = "FRONTEND"
+
+    buildType(Frontend_FrontendUnitTests)
+    buildType(Frontend_MakeFrontEndUnitTests)
+
+    template(UNIT_FRONTEND)
+})
 
 object HelloWorld : BuildType({
     name = "Hello world #1"
@@ -124,6 +134,138 @@ object PlaywrightDSL : BuildType({
         parallelTests {
             enabled = false
             numberOfBatches = 2
+        }
+    }
+})
+
+object Backend : Project({
+    name = "BACKEND"
+
+    buildType(BackendUnitAnalytics)
+    buildType(Backend_MakeBackendUnitTests)
+    buildType(BackendSurvey)
+
+    template(UNIT_BACKEND)
+})
+
+object BackendSurvey : BuildType({
+    templates(UNIT_BACKEND)
+    name = "Backend (Survey)"
+})
+
+object BackendUnitAnalytics : BuildType({
+    templates(UNIT_BACKEND)
+    name = "Backend unit (Analytics)"
+
+    params {
+        param("env.BACKEND_UNIT_SCOPE", "analytics")
+    }
+})
+
+object Backend_MakeBackendUnitTests : BuildType({
+    name = "Make backend unit-tests"
+
+    type = BuildTypeSettings.Type.COMPOSITE
+
+    vcs {
+        showDependenciesChanges = true
+    }
+
+    dependencies {
+        snapshot(BackendSurvey) {
+        }
+        snapshot(BackendUnitAnalytics) {
+        }
+    }
+})
+
+object UNIT_BACKEND : Template({
+    name = "UNIT_BACKEND"
+
+    params {
+        param("env.BACKEND_UNIT_SCOPE", "survey")
+    }
+
+    vcs {
+        root(AbsoluteId("HttpsGithubComGrmmvvTcdslGit"))
+    }
+
+    steps {
+        script {
+            name = "BACKEND_UNIT"
+            id = "RUNNER_14"
+            scriptContent = """echo "Backend unit-test: %env.BACKEND_UNIT_SCOPE%""""
+        }
+    }
+
+    features {
+        commitStatusPublisher {
+            id = "BUILD_EXT_9"
+            vcsRootExtId = "HttpsGithubComGrmmvvTcdslGit"
+            publisher = github {
+                githubUrl = "https://api.github.com"
+                authType = personalToken {
+                    token = "cks242b2c2e4dc0c35b6e3906a2883c8a51PJOm6a09jlW8z1cIbUVnZOA9glnTQ9bBJeJaG73OE+wWDDN0mu5s8o54L/6Y5agG"
+                }
+            }
+        }
+    }
+})
+
+
+object Frontend : Project({
+    name = "FRONTEND"
+
+    buildType(Frontend_FrontendUnitTests)
+    buildType(Frontend_MakeFrontEndUnitTests)
+
+    template(UNIT_FRONTEND)
+})
+
+object Frontend_FrontendUnitTests : BuildType({
+    templates(UNIT_FRONTEND)
+    name = "Frontend unit-tests"
+})
+
+object Frontend_MakeFrontEndUnitTests : BuildType({
+    name = "Make front-end unit-tests"
+
+    type = BuildTypeSettings.Type.COMPOSITE
+
+    vcs {
+        showDependenciesChanges = true
+    }
+
+    dependencies {
+        snapshot(Frontend_FrontendUnitTests) {
+        }
+    }
+})
+
+object UNIT_FRONTEND : Template({
+    name = "UNIT_FRONTEND"
+
+    vcs {
+        root(AbsoluteId("HttpsGithubComGrmmvvTcdslGit"))
+    }
+
+    steps {
+        script {
+            id = "RUNNER_15"
+            scriptContent = """echo "This is frontend unit-tests""""
+        }
+    }
+
+    features {
+        commitStatusPublisher {
+            id = "BUILD_EXT_10"
+            vcsRootExtId = "HttpsGithubComGrmmvvTcdslGit"
+            publisher = github {
+                githubUrl = "https://api.github.com"
+                authType = personalToken {
+                    token = "cks242b2c2e4dc0c35b6e3906a2883c8a51PJOm6a09jlW8z1cIbUVnZOA9glnTQ9bBJeJaG73OE+wWDDN0mu5s8o54L/6Y5agG"
+                }
+            }
         }
     }
 })
